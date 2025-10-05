@@ -3,37 +3,297 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cute Login Boxes</title>
+  <title>Cute Login Boxes — v2</title>
   <style>
-    :root {
+    :root{
       --bg: #ffffff;
-      --accent: #5b9dff;
-      --muted: #444;
-      --box: #f3f7ff;
-      --border: #d6e4ff;
+      --panel:#fbfdff;
+      --muted:#556;
+      --accent:#4b9bff;
+      --err:#e04b5a;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:var(--bg);font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;color:var(--muted);display:flex;align-items:center;justify-content:center;padding:36px}
+
+    .layout{width:1050px;max-width:96%;display:grid;grid-template-columns:1fr 380px;gap:36px;align-items:center}
+
+    /* LEFT: characters */
+    .left{position:relative}
+    .chars{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+
+    .char{
+      border-radius:12px;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;transition:transform .18s ease;
+      border:1px solid rgba(0,0,0,0.06);
+      box-shadow:0 6px 18px rgba(20,40,80,0.04);
     }
 
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: var(--bg);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      overflow: hidden;
+    /* sizes */
+    .size-sm{height:110px}
+    .size-md{height:150px}
+    .size-lg{height:190px}
+
+    /* colors (pastel) */
+    .c-1{background: #ffd6e0; border-color:#ffbccc}
+    .c-2{background: #d6eaff; border-color:#bbdcff}
+    .c-3{background: #dff7e9; border-color:#bbefcf}
+    .c-4{background: #fff1da; border-color:#ffe1b9}
+    .c-5{background: #eee0ff; border-color:#dccbff}
+    .c-6{background: #fff9cc; border-color:#fff3a8}
+
+    .eyes{display:flex;gap:14px;margin-bottom:8px}
+    .eye{width:42px;height:42px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:2px solid rgba(0,0,0,0.25);overflow:hidden;position:relative}
+    .pupil{width:16px;height:16px;border-radius:50%;background:#111;transform:translate(0,0);transition:transform .08s linear}
+
+    .mouth{width:34px;height:8px;background:#111;border-radius:10px;transition:transform .12s ease,opacity .12s ease}
+
+    /* bubble under characters */
+    .bubble{position:absolute;left:50%;transform:translateX(-50%);bottom:-36px;background:#f6fbff;border:1px solid rgba(0,0,0,0.06);padding:8px 12px;border-radius:999px;font-weight:600;color:#11325a;box-shadow:0 8px 20px rgba(30,50,90,0.06)}
+
+    /* RIGHT: form */
+    .panel{background:var(--panel);border-radius:12px;padding:26px;border:1px solid rgba(0,0,0,0.04)}
+    h2{margin:0 0 8px;font-size:20px;color:#0b2b4a}
+    label{display:block;font-size:13px;margin-top:10px;color:#244262}
+    input[type=text],input[type=password]{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #dbe9ff;background:#fff;font-size:15px;margin-top:6px}
+    .hint{height:20px;margin-top:8px;font-size:13px;color:var(--muted)}
+    .hint.err{color:var(--err);font-weight:700}
+    .actions{display:flex;gap:8px;margin-top:14px}
+    button{padding:10px 14px;border-radius:8px;border:0;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
+
+    @media(max-width:980px){.layout{grid-template-columns:1fr}.bubble{display:none}}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <div class="left">
+      <div class="chars" id="chars"></div>
+      <div class="bubble" id="bubble">Hey! We're watching... politely.</div>
+    </div>
+
+    <div class="panel">
+      <h2>Sign up to CuteHub</h2>
+      <label for="username">Username</label>
+      <input id="username" type="text" placeholder="eg. abhi_hero" autocomplete="username" />
+      <label for="password">Password</label>
+      <input id="password" type="password" placeholder="8+ characters" autocomplete="new-password" />
+      <div class="hint" id="passHint">&nbsp;</div>
+      <div class="actions">
+        <button id="signup">Create account</button>
+        <button id="demo" style="background:transparent;border:1px solid rgba(0,0,0,0.06);color:var(--muted)">Try demo</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // config
+    const palette = ['c-1','c-2','c-3','c-4','c-5','c-6'];
+    const sizes = ['size-md','size-sm','size-lg','size-md','size-sm','size-lg'];
+
+    const charsEl = document.getElementById('chars');
+    const bubble = document.getElementById('bubble');
+    const username = document.getElementById('username');
+    const password = document.getElementById('password');
+    const passHint = document.getElementById('passHint');
+
+    const characters = [];
+
+    // build 6 characters with different sizes & colors
+    for(let i=0;i<6;i++){
+      const box = document.createElement('div');
+      box.className = `char ${sizes[i]} ${palette[i]}`;
+      box.innerHTML = `
+        <div class="eyes">
+          <div class="eye"><div class="pupil"></div></div>
+          <div class="eye"><div class="pupil"></div></div>
+        </div>
+        <div class="mouth"></div>
+      `;
+      charsEl.appendChild(box);
+      characters.push(box);
     }
 
-    .container {
-      width: 1000px;
-      max-width: 95%;
-      display: grid;
-      grid-template-columns: 1fr 380px;
-      gap: 40px;
-      align-items: center;
+    const pupils = Array.from(document.querySelectorAll('.pupil'));
+    const mouths = Array.from(document.querySelectorAll('.mouth'));
+
+    // state
+    let averted = false; // are they looking away (password)
+    let idleTick = 0;
+    let peekTimer = null;
+
+    // Helper: set pupil transform directly
+    function setPupil(pupil, x, y){
+      pupil.style.transform = `translate(${x}px, ${y}px)`;
     }
 
-    /* Left side characters */
+    // normal follow cursor
+    window.addEventListener('mousemove', e => {
+      if(averted) return; // don't follow when averted
+      pupils.forEach(pupil => {
+        const eye = pupil.parentElement;
+        const rect = eye.getBoundingClientRect();
+        const cx = rect.left + rect.width/2;
+        const cy = rect.top + rect.height/2;
+        const dx = e.clientX - cx;
+        const dy = e.clientY - cy;
+        const angle = Math.atan2(dy, dx);
+        const max = Math.min(rect.width, rect.height) * 0.18; // movement limit
+        const dist = Math.min(max, Math.hypot(dx,dy)/10);
+        const tx = Math.cos(angle) * dist;
+        const ty = Math.sin(angle) * dist;
+        setPupil(pupil, tx, ty);
+      });
+    });
+
+    // idle subtle movement when not interacting
+    setInterval(()=>{
+      if(averted) return;
+      idleTick = (idleTick+1) % 7200;
+      const cx = window.innerWidth/2 + Math.cos(idleTick/60)*30;
+      const cy = window.innerHeight/2 + Math.sin(idleTick/48)*12;
+      pupils.forEach(pupil=>{
+        const eye = pupil.parentElement;
+        const rect = eye.getBoundingClientRect();
+        const ex = rect.left + rect.width/2;
+        const ey = rect.top + rect.height/2;
+        const dx = cx - ex;
+        const dy = cy - ey;
+        const angle = Math.atan2(dy,dx);
+        const dist = Math.min(8, Math.hypot(dx,dy)/25);
+        const tx = Math.cos(angle)*dist;
+        const ty = Math.sin(angle)*dist;
+        setPupil(pupil, tx, ty);
+      });
+    },1200);
+
+    // MAKE them look away (left) — used when focusing password or on wrong pass
+    function makeLookAway(){
+      averted = true;
+      // set all to left-ish position
+      pupils.forEach((p,i)=>{
+        // left offset with slight vertical jitter
+        const left = -12 + (i%2===0? -2:2);
+        const up = (i%3)-1; // -1,0,1
+        setPupil(p, left, up*4);
+      });
+      // schedule occasional peeks
+      schedulePeek();
+      bubble.innerText = "They're looking away... (one might peek)";
+    }
+
+    function makeLookNormal(){
+      averted = false;
+      bubble.innerText = "Hey! We're watching... politely.";
+      // reset positions (center)
+      pupils.forEach(p=>setPupil(p,0,0));
+      cancelPeek();
+    }
+
+    function schedulePeek(){
+      cancelPeek();
+      // pick random intervals to attempt a peek
+      peekTimer = setInterval(()=>{
+        tryPeek();
+      }, 900 + Math.random()*2000);
+    }
+    function cancelPeek(){ if(peekTimer) { clearInterval(peekTimer); peekTimer=null; } }
+
+    function tryPeek(){
+      // random chance some box tries to peek
+      if(Math.random() > 0.6) return; // 40% chance
+      const idx = Math.floor(Math.random()*characters.length);
+      const box = characters[idx];
+      const boxPupils = box.querySelectorAll('.pupil');
+      // for a short time, bring its pupils to neutral/center
+      boxPupils.forEach(p => setPupil(p, 0, 0));
+      // also slightly open its mouth
+      const m = box.querySelector('.mouth');
+      m.style.transform = 'scaleY(1.8) translateY(-2px)';
+      setTimeout(()=>{
+        // restore to away position if still averted
+        if(averted){
+          boxPupils.forEach((p,i)=> setPupil(p, -12 + (i%2===0?-2:2), (i%3)-1));
+        } else {
+          boxPupils.forEach(p=> setPupil(p,0,0));
+        }
+        m.style.transform = 'scaleY(1)';
+      }, 700 + Math.random()*700);
+    }
+
+    // input interactions
+    username.addEventListener('focus', ()=>{
+      makeLookNormal();
+      bubble.innerText = 'Spill the tea — username time.';
+      // mouths gossip when typing
+      mouths.forEach((m,i)=> m.style.transform = 'scaleY(1.6)');
+    });
+    username.addEventListener('blur', ()=>{ mouths.forEach(m=>m.style.transform='scaleY(1)'); bubble.innerText='Hey! We\'re watching... politely.' });
+    username.addEventListener('input', ()=>{
+      const v = username.value.trim();
+      bubble.innerText = v? `Ooo — ${v.split(' ')[0]}! Cute.` : 'Spill the tea — username time.';
+    });
+
+    password.addEventListener('focus', ()=>{
+      makeLookAway();
+    });
+    password.addEventListener('input', ()=>{
+      if(password.value.length === 0){
+        // still away but idle
+        bubble.innerText = "They're looking away... (one might peek)";
+      }
+      // if user types some chars, keep them averted but allow peeks
+      makeLookAway();
+    });
+    password.addEventListener('blur', ()=>{
+      makeLookNormal();
+    });
+
+    // demo & signup buttons
+    document.getElementById('demo').addEventListener('click', ()=>{
+      username.value = 'abhi_example';
+      password.value = 'short';
+      username.dispatchEvent(new Event('input'));
+      password.dispatchEvent(new Event('input'));
+    });
+
+    document.getElementById('signup').addEventListener('click', ()=>{
+      const u = username.value.trim();
+      const p = password.value;
+      passHint.classList.remove('err');
+      passHint.innerText = '';
+      if(u.length < 3){
+        bubble.innerText = 'Username needs 3+ chars.';
+        return;
+      }
+      if(p.length < 8){
+        passHint.classList.add('err');
+        passHint.innerText = 'Password is too short';
+        // animate and look away
+        makeLookAway();
+        characters.forEach(box=> box.animate([{transform:'translateY(0)'},{transform:'translateY(-6px)'},{transform:'translateY(0)'}],{duration:260}));
+        return;
+      }
+      // playful fake-check flow -> always show wrong password (demo)
+      bubble.innerText = 'Checking credentials...';
+      passHint.innerText = '';
+      // subtle pause then show wrong
+      setTimeout(()=>{
+        passHint.classList.add('err');
+        passHint.innerText = 'Wrong password';
+        bubble.innerText = 'Oh no — wrong password. They look away in shame.';
+        // make them look more away and one peeks
+        makeLookAway();
+        // quick peek by one box for fun
+        tryPeek();
+        // little shake on panel (visual hint)
+        document.querySelector('.panel').animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:420});
+      },900);
+    });
+
+    // init: a neutral pose
+    makeLookNormal();
+  </script>
+</body>
+</html>
     .characters {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
