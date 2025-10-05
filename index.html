@@ -3,274 +3,207 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cute Login — Eyes Follow</title>
+  <title>Cute Login Boxes</title>
   <style>
-    :root{--bg:#0b1020;--panel:#0f1724;--accent:#9be3ff;--muted:#8b98a8;--glass:rgba(255,255,255,0.03)}
-    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;background:linear-gradient(180deg,#071021 0%, #081426 100%);color:#e6f0ff}
-    .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:40px}
-    .card{width:920px;max-width:96%;background:linear-gradient(180deg,var(--panel), #071225);border-radius:16px;padding:36px;box-shadow:0 10px 30px rgba(2,6,23,.6);display:grid;grid-template-columns:1fr 380px;gap:22px}
+    :root {
+      --bg: #ffffff;
+      --accent: #5b9dff;
+      --muted: #444;
+      --box: #f3f7ff;
+      --border: #d6e4ff;
+    }
 
-    /* left: big mascot */
-    .mascot{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);}
-    .mascot .scene{width:100%;display:flex;align-items:center;justify-content:center;gap:20px}
-    .eyes{display:flex;gap:18px;align-items:center}
-    .eye{width:120px;height:120px;border-radius:50%;background:var(--glass);position:relative;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 -6px 18px rgba(3,10,20,.6);}
-    .eye .sclera{width:86%;height:86%;border-radius:50%;background:linear-gradient(180deg,#ffffff,#e6f7ff);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-    .pupil{width:36px;height:36px;border-radius:50%;background:#021226;position:absolute;transform:translate(-50%,-50%);left:50%;top:50%;transition:transform .06s linear}
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
 
-    /* eyelid for shy/avert */
-    .eye.avert .sclera{filter:brightness(.7)}
+    .container {
+      width: 1000px;
+      max-width: 95%;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 40px;
+      align-items: center;
+    }
 
-    /* mouth */
-    .mouth{margin-top:18px;height:28px;width:220px;display:flex;align-items:center;justify-content:center}
-    .mouth .bubble{padding:8px 12px;border-radius:12px;background:rgba(255,255,255,0.04);color:var(--accent);font-weight:600;font-size:15px}
+    /* Left side characters */
+    .characters {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 160px);
+      gap: 20px;
+    }
 
-    /* right: form */
-    .panel{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:24px;border-radius:12px;display:flex;flex-direction:column;gap:12px}
-    h2{margin:0 0 6px 0;font-size:20px}
-    p.sub{margin:0;color:var(--muted);font-size:13px}
-    label{font-size:13px;color:var(--muted);display:block;margin-top:8px}
-    input[type=text],input[type=password]{width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;outline:none;font-size:15px}
-    .row{display:flex;gap:8px;align-items:center}
-    .hint{font-size:13px;color:var(--muted);min-height:20px}
-    .hint.error{color:#ff8b94;font-weight:700}
-    .actions{display:flex;gap:10px;margin-top:10px}
-    button{padding:10px 14px;border-radius:10px;border:0;background:var(--accent);color:#042536;font-weight:700;cursor:pointer}
-    .mutebtn{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+    .char {
+      background: var(--box);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+      position: relative;
+    }
 
-    /* responsive */
-    @media (max-width:880px){.card{grid-template-columns:1fr;}}
+    .eyes {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 10px;
+    }
+
+    .eye {
+      width: 40px;
+      height: 40px;
+      background: #fff;
+      border: 2px solid #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .pupil {
+      width: 15px;
+      height: 15px;
+      background: #000;
+      border-radius: 50%;
+      transition: transform 0.1s linear;
+    }
+
+    .mouth {
+      width: 30px;
+      height: 6px;
+      background: #000;
+      border-radius: 10px;
+      transition: transform 0.2s ease;
+    }
+
+    /* Right panel */
+    .panel {
+      background: #f6f9ff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+
+    h2 { margin-top: 0; }
+
+    input[type=text], input[type=password] {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 6px;
+      margin-bottom: 10px;
+      border: 1px solid #cdd9ff;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    @media(max-width:900px){
+      .container { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <div class="mascot">
-        <div class="scene">
-          <div class="eyes">
-            <div class="eye" id="eyeL">
-              <div class="sclera"><div class="pupil" id="pupilL"></div></div>
-            </div>
-            <div class="eye" id="eyeR">
-              <div class="sclera"><div class="pupil" id="pupilR"></div></div>
-            </div>
-          </div>
-        </div>
-        <div class="mouth" id="mouth"><div class="bubble" id="bubble">Hello there! ✨</div></div>
-      </div>
-
-      <div class="panel">
-        <div>
-          <h2>Sign up to CuteHub</h2>
-          <p class="sub">A tiny friendly login that reacts to you. Try it — it's low-key adorable.</p>
-        </div>
-
-        <div>
-          <label for="username">Username</label>
-          <input id="username" type="text" autocomplete="username" placeholder="eg. abhi_hero" />
-          <div class="hint" id="userHint">&nbsp;</div>
-        </div>
-
-        <div>
-          <label for="password">Password</label>
-          <input id="password" type="password" autocomplete="new-password" placeholder="make it strong (8+ chars)" />
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
-            <div class="hint" id="passHint">&nbsp;</div>
-            <div class="row"><input id="showPass" type="checkbox" style="margin-right:6px"/><label for="showPass" style="margin:0;font-size:13px;color:var(--muted)">Show</label></div>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button id="signup">Create account</button>
-          <button class="mutebtn" id="demo">Try demo</button>
-        </div>
-      </div>
+  <div class="container">
+    <div class="characters" id="chars"></div>
+    <div class="panel">
+      <h2>Sign up to CuteHub</h2>
+      <label>Username</label>
+      <input type="text" id="username" placeholder="e.g. abhi_hero" />
+      <label>Password</label>
+      <input type="password" id="password" placeholder="8+ characters" />
+      <button id="signup">Create Account</button>
     </div>
   </div>
 
   <script>
-    // Utilities
-    const pupilL = document.getElementById('pupilL');
-    const pupilR = document.getElementById('pupilR');
-    const eyeL = document.getElementById('eyeL');
-    const eyeR = document.getElementById('eyeR');
-    const bubble = document.getElementById('bubble');
-    const mouth = document.getElementById('mouth');
+    const charsContainer = document.getElementById('chars');
     const username = document.getElementById('username');
     const password = document.getElementById('password');
-    const userHint = document.getElementById('userHint');
-    const passHint = document.getElementById('passHint');
-    const showPass = document.getElementById('showPass');
 
-    // Track whether eyes are averted (show password)
-    let averted = false;
+    const characters = [];
 
-    // Make pupils follow cursor within limits
-    function setPupilPos(pupil, eyeRect, clientX, clientY){
-      const eyeCenterX = eyeRect.left + eyeRect.width/2;
-      const eyeCenterY = eyeRect.top + eyeRect.height/2;
-      const dx = clientX - eyeCenterX;
-      const dy = clientY - eyeCenterY;
-      // limit distance
-      const max = Math.min(eyeRect.width, eyeRect.height) * 0.18;
-      const angle = Math.atan2(dy, dx);
-      const dist = Math.min(max, Math.hypot(dx,dy));
-      const x = eyeRect.width/2 + Math.cos(angle)*dist;
-      const y = eyeRect.height/2 + Math.sin(angle)*dist;
-      pupil.style.transform = `translate(${x - eyeRect.width/2}px, ${y - eyeRect.height/2}px)`;
+    // Create 6 boxes with eyes and mouth
+    for(let i=0;i<6;i++){
+      const box = document.createElement('div');
+      box.className = 'char';
+      box.innerHTML = `
+        <div class="eyes">
+          <div class="eye"><div class="pupil"></div></div>
+          <div class="eye"><div class="pupil"></div></div>
+        </div>
+        <div class="mouth"></div>
+      `;
+      charsContainer.appendChild(box);
+      characters.push(box);
     }
 
-    // global cursor listener (desktop)
-    window.addEventListener('mousemove', (e)=>{
-      if(averted) return; // if averted, ignore
-      const rectL = eyeL.getBoundingClientRect();
-      const rectR = eyeR.getBoundingClientRect();
-      setPupilPos(pupilL, rectL, e.clientX, e.clientY);
-      setPupilPos(pupilR, rectR, e.clientX, e.clientY);
+    const eyes = document.querySelectorAll('.eye');
+    const pupils = document.querySelectorAll('.pupil');
+
+    // Eyes follow cursor normally
+    window.addEventListener('mousemove', e => {
+      const x = e.clientX;
+      const y = e.clientY;
+      pupils.forEach(pupil => {
+        const rect = pupil.getBoundingClientRect();
+        const dx = x - rect.left;
+        const dy = y - rect.top;
+        const angle = Math.atan2(dy, dx);
+        const dist = Math.min(10, Math.hypot(dx,dy)/25);
+        const tx = Math.cos(angle) * dist;
+        const ty = Math.sin(angle) * dist;
+        pupil.style.transform = `translate(${tx}px, ${ty}px)`;
+      });
     });
 
-    // on touchmove for mobile
-    window.addEventListener('touchmove', (e)=>{
-      const t = e.touches[0];
-      if(!t) return;
-      const rectL = eyeL.getBoundingClientRect();
-      const rectR = eyeR.getBoundingClientRect();
-      setPupilPos(pupilL, rectL, t.clientX, t.clientY);
-      setPupilPos(pupilR, rectR, t.clientX, t.clientY);
-    }, {passive:true});
+    // When typing username — gossip mode
+    username.addEventListener('input', () => {
+      const value = username.value.trim();
+      characters.forEach((box,i)=>{
+        const mouth = box.querySelector('.mouth');
+        mouth.style.transform = value.length>0 ? 'scaleY(1.8)' : 'scaleY(1)';
+      });
+    });
 
-    // Simple "conversation" for username
-    username.addEventListener('input', ()=>{
-      const v = username.value.trim();
-      if(v.length === 0){
-        bubble.innerText = 'Hey — what should we call you?';
-        userHint.innerText = '';
-      } else if(v.length < 3){
-        bubble.innerText = 'Cute! But keep it 3+ chars.';
-        userHint.innerText = 'Username too short';
-        userHint.classList.add('error');
-      } else {
-        bubble.innerText = `Ooo — nice name, ${v.split(/\s/)[0]}!`;
-        userHint.innerText = '';
-        userHint.classList.remove('error');
-        // tiny wink animation: left eye blinks
-        blinkOnce();
+    // When typing password — they look away
+    password.addEventListener('input', () => {
+      if(password.value.length>0){
+        pupils.forEach((p,i)=>{
+          const offset = (i%2===0?-1:1) * 10;
+          p.style.transform = `translate(${offset}px, -8px)`;
+        });
+        // Random box peeks sometimes
+        const peek = Math.floor(Math.random()*characters.length);
+        const peekEye = characters[peek].querySelectorAll('.pupil');
+        peekEye.forEach(pe=> pe.style.transform = 'translate(0px, 0px)');
       }
     });
 
-    function blinkOnce(){
-      eyeL.style.transition = 'filter .12s';
-      eyeL.classList.add('avert');
-      setTimeout(()=>eyeL.classList.remove('avert'),140);
-    }
-
-    // Password validation & messages
-    password.addEventListener('input', ()=>{
-      const v = password.value;
-      if(v.length === 0){
-        passHint.innerText = '';
-        bubble.innerText = 'Keep your secrets safe ❤️';
-      } else if(v.length < 8){
-        passHint.innerText = 'Password is too short';
-        passHint.classList.add('error');
-        bubble.innerText = 'Too short — we like 8+ chars.';
-        jitter(mouth);
-      } else {
-        passHint.innerText = '';
-        bubble.innerText = 'Looking strong 💪';
-        passHint.classList.remove('error');
-      }
+    // Reset eyes after blur
+    password.addEventListener('blur',()=>{
+      pupils.forEach(p=>p.style.transform='translate(0,0)');
     });
-
-    // show password toggles eye aversion
-    showPass.addEventListener('change', ()=>{
-      averted = showPass.checked;
-      if(averted){
-        // pupils look away/down
-        pupilL.style.transform = 'translate(-12px, 18px)';
-        pupilR.style.transform = 'translate(12px, 18px)';
-        eyeL.classList.add('avert');
-        eyeR.classList.add('avert');
-        bubble.innerText = "Eyes away! Privacy mode.";
-      } else {
-        eyeL.classList.remove('avert');
-        eyeR.classList.remove('avert');
-        bubble.innerText = 'Back to watching you ✨';
-      }
-      password.type = averted ? 'text' : 'password';
-    });
-
-    // demo & signup buttons
-    document.getElementById('demo').addEventListener('click', ()=>{
-      username.value = 'abhi_example';
-      username.dispatchEvent(new Event('input'));
-      password.value = 'password123';
-      password.dispatchEvent(new Event('input'));
-    });
-
-    document.getElementById('signup').addEventListener('click', ()=>{
-      const u = username.value.trim();
-      const p = password.value;
-      if(u.length < 3){
-        bubble.innerText = 'We need a proper username.';
-        userHint.innerText = 'Pick a username (3+ chars)';
-        userHint.classList.add('error');
-        return;
-      }
-      if(p.length < 8){
-        bubble.innerText = 'Password too weak — nope.';
-        passHint.innerText = 'Password is too short';
-        passHint.classList.add('error');
-        jitter(mouth);
-        return;
-      }
-      // fake wrong-pass effect to be playful
-      bubble.innerText = 'Hmm... double-checking...';
-      passHint.innerText = '';
-      setTimeout(()=>{
-        bubble.innerText = 'Ooops — wrong pass. Try again.';
-        passHint.innerText = 'Wrong password';
-        passHint.classList.add('error');
-        shake(document.querySelector('.panel'));
-      },900);
-    });
-
-    // little animations
-    function jitter(el){
-      el.animate([{transform:'translateY(0)'},{transform:'translateY(-6px)'},{transform:'translateY(0)'}],{duration:220,easing:'ease-out'});
-    }
-    function shake(el){
-      el.animate([
-        {transform:'translateX(0)'},{transform:'translateX(-8px)'},{transform:'translateX(8px)'},{transform:'translateX(0)'}
-      ],{duration:420,iterations:1});
-    }
-
-    // initial subtle idle movement so page feels alive
-    let idle = 0;
-    setInterval(()=>{
-      if(averted) return;
-      idle = (idle+1)%360;
-      const rectL = eyeL.getBoundingClientRect();
-      const rectR = eyeR.getBoundingClientRect();
-      const w = window.innerWidth/2 + Math.cos(idle/40)*40;
-      const h = window.innerHeight/2 + Math.sin(idle/40)*18;
-      setPupilPos(pupilL, rectL, w, h);
-      setPupilPos(pupilR, rectR, w, h);
-    },1400);
-
-    // accessibility: focus moves eyes to focused input
-    [username,password].forEach(inp=>inp.addEventListener('focus', (e)=>{
-      const rectL = eyeL.getBoundingClientRect();
-      const rectR = eyeR.getBoundingClientRect();
-      // map input position to gaze
-      const elRect = e.target.getBoundingClientRect();
-      const tx = elRect.left + elRect.width/2;
-      const ty = elRect.top + elRect.height/2 - 10;
-      setPupilPos(pupilL, rectL, tx, ty);
-      setPupilPos(pupilR, rectR, tx, ty);
-      bubble.innerText = e.target === username ? 'Type your username' : 'Type a secret password';
-    }));
-
   </script>
 </body>
 </html>
